@@ -1,20 +1,12 @@
-class User
-  include Save
+class User < Table
 
-  def db_name
+  def self.table_name
     'users'
   end
 
   def self.find_by_name(fname, lname)
     result = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
       SELECT * FROM users WHERE fname = ? AND lname = ?
-    SQL
-    User.new(result.first)
-  end
-
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT * FROM users WHERE id = ?
     SQL
     User.new(result.first)
   end

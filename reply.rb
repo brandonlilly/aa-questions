@@ -1,15 +1,7 @@
-class Reply
-  include Save
+class Reply < Table
 
-  def db_name
+  def self.table_name
     'replies'
-  end
-
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT * FROM replies WHERE id = ?
-    SQL
-    Reply.new(result.first)
   end
 
   def self.find_by_user_id(user_id)

@@ -1,4 +1,11 @@
-module Save
+class Table
+
+  def self.find_by_id(id)
+    result = QuestionsDatabase.instance.execute(<<-SQL, id)
+      SELECT * FROM #{self.table_name} WHERE id = ?
+    SQL
+    self.new(result.first)
+  end
 
   def save
     variables = instance_variables[1..-1]
@@ -8,25 +15,17 @@ module Save
       columns = variables.map { |variable| variable.to_s[1..-1] }.join(', ')
       question_marks = (["?"] * variables.count).join(", ")
       sql_code = <<-SQL
-        INSERT INTO #{db_name} (#{columns})
+        INSERT INTO #{table_name} (#{columns})
         VALUES (#{question_marks})
       SQL
-
       QuestionsDatabase.instance.execute(sql_code, *values)
       @id = QuestionsDatabase.instance.last_insert_row_id
     else
-      set = variables.map do |variable|
-        column = variable[1..-1].to_s
-        "#{column} = ?"
-      end
-
+      set = variables.map { |variable| "#{variable[1..-1]} = ?" }
       sql_code = <<-SQL
-        UPDATE #{db_name}
-          SET #{set.join(', ')}
-        WHERE
-          id = ?
+        UPDATE #{self.class.table_name} SET #{set.join(', ')}
+        WHERE id = ?
       SQL
-
       QuestionsDatabase.instance.execute(sql_code, *values, id)
     end
   end

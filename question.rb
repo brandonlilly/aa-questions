@@ -1,15 +1,7 @@
-class Question
-  include Save
+class Question < Table
 
-  def db_name
+  def self.table_name
     'questions'
-  end
-
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT * FROM questions WHERE id = ?
-    SQL
-    Question.new(result.first)
   end
 
   def self.find_by_author_id(author_id)

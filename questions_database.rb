@@ -1,6 +1,6 @@
 require 'singleton'
 require 'sqlite3'
-require_relative 'module_save'
+require_relative 'table'
 require_relative 'user'
 require_relative 'question'
 require_relative 'reply'

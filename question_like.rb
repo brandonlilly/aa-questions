@@ -1,10 +1,7 @@
-class QuestionLike
+class QuestionLike < Table
 
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT * FROM question_likes WHERE id = ?
-    SQL
-    QuestionLike.new(result.first)
+  def self.table_name
+    'question_likes'
   end
 
   def self.likers_for_question_id(question_id)
@@ -63,8 +60,6 @@ class QuestionLike
         questions
       JOIN
         question_likes ON questions.id = question_likes.question_id
-      -- JOIN
-      --   users ON users.id = question_likes.user_id
       GROUP BY
         questions.id
       ORDER BY

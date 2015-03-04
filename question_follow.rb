@@ -1,10 +1,7 @@
-class QuestionFollow
+class QuestionFollow < Table
 
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT * FROM question_follows WHERE id = ?
-    SQL
-    QuestionFollow.new(result.first)
+  def self.table_name
+    'question_follows'
   end
 
   # returns followers of question with that id
@@ -49,8 +46,6 @@ class QuestionFollow
         questions
       JOIN
         question_follows ON questions.id = question_follows.question_id
-      -- JOIN
-      --   users ON users.id = question_follows.user_id
       GROUP BY
         questions.id
       ORDER BY
